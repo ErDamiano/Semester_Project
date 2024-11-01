@@ -4,13 +4,13 @@ import os
 import re
 
 # Set initial parameters
-Nx = 256  # Default width window
-Ny = 256 # Default height window
-x, y = 1200, 1200  # Default center coordinates for the crop window
+Nx = 512  # Default width window
+Ny = 128 # Default height window
+x, y = 1100, 1000  # Default center coordinates for the crop window
 
 # Input and output directories for MAC
-input_dir = "/Users/DamianFrei/Desktop/ETH/Master/SemesterProject/stabilizedFrames/MN_001"
-output_dir = "/Users/DamianFrei/Desktop/ETH/Master/SemesterProject/croppedFrames/MN_001"
+input_dir = "/Users/DamianFrei/Desktop/ETH/Master/SemesterProject/stabilizedFrames/MN_903"
+output_dir = "/Users/DamianFrei/Desktop/ETH/Master/SemesterProject/croppedFrames/MN_903"
 os.makedirs(output_dir, exist_ok=True)
 
 
