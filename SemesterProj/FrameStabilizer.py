@@ -3,9 +3,9 @@ import numpy as np
 import glob
 
 # Load frames Mac
-# frames = [cv2.imread(file) for file in sorted(glob.glob("/Volumes/MASTER HAND/2D/*.tiff"))]
+frames = [cv2.imread(file) for file in sorted(glob.glob("/Volumes/MEMORIAEST/SemesterProjectData/2024_01_08E/MN_00/2024_01_08E_MN_00_001/pics/2D/*.tiff"))]
 # Load frames Windows
-frames = [cv2.imread(file) for file in sorted(glob.glob("G:\2D\2024_01_08E_PU_00_001-0001_0.tiff"))]
+# frames = [cv2.imread(file) for file in sorted(glob.glob("G:\2D\2024_01_08E_PU_00_001-0001_0.tiff"))]
 
 # Convert frames to grayscale for better feature detection
 gray_frames = [cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) for frame in frames]
@@ -44,10 +44,10 @@ for frame in gray_frames:
     stabilized_frames.append(stabilized_frame)
 
 # Save or display stabilized frames Mac
-# output_folder = "/Users/DamianFrei/Desktop/ETH/Master/SemesterProject/stabilizedFrames/"
+output_folder = "/Users/DamianFrei/Desktop/ETH/Master/SemesterProject/stabilizedFrames/MN_001/"
 
 # Save or display stabilized frames Windows
-output_folder = "C:\Users\damfrei\Desktop\SemesterProject\SemesterProj\StabilizedFrames"
+# output_folder = "C:\Users\damfrei\Desktop\SemesterProject\SemesterProj\StabilizedFrames"
 
 for i, frame in enumerate(stabilized_frames):
     cv2.imwrite(f"{output_folder}stabilized_frame_{i}.jpg", frame)
