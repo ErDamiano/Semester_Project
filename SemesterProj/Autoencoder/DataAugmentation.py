@@ -6,10 +6,12 @@ import os
 
 def data_augmentation(input_dir, output_dir):
 
-    # Collect all file paths from each directory
-    all_files = []
-    for dir_path in input_dir:
-        all_files.extend(glob.glob(os.path.join(dir_path, "*.jpg")))  # Adjust extension if needed
+    # Create the output directory if it doesn't exist
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+    # Collect all file paths from the input directory
+    all_files = glob.glob(os.path.join(input_dir, "*.jpg"))  # Adjust extension if needed
 
     # Load images in grayscale
     images = [cv2.imread(file, cv2.IMREAD_GRAYSCALE) for file in all_files]
@@ -24,16 +26,16 @@ def data_augmentation(input_dir, output_dir):
             scale=(0.9, 1.1)  # Scale images to 90% to 110%
         ),
         iaa.AdditiveGaussianNoise(scale=(0, 0.01 * 255)),  # Add Gaussian noise
-        iaa.ContrastNormalization((0.8, 1.2)),  # Adjust contrast
+        iaa.LinearContrast((0.8, 1.2)),  # Adjust contrast
         iaa.Crop(percent=(0, 0.1)),  # Randomly crop images
     ])
 
     # Apply augmentations to each image
     augmented_images = seq(images=images)
 
-    # Save or use augmented images
-    output_dir = "/Users/DamianFrei/Desktop/ETH/Master/SemesterProject/croppedFrames/All_Augmented/"
+    # Save augmented images
     for i, img in enumerate(augmented_images):
+        img = np.clip(img, 0, 255).astype(np.uint8)  # Ensure the image is in the correct format
         cv2.imwrite(f"{output_dir}/augmented_image_{i}.jpg", img)
 
     print("Augmentation completed and saved to:", output_dir)
