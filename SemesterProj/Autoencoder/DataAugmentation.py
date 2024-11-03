@@ -3,6 +3,11 @@ import glob
 import imgaug.augmenters as iaa
 import numpy as np
 import os
+import re
+
+# Natural sorting function for image filenames
+def natural_sort_key(file_path):
+    return [int(text) if text.isdigit() else text.lower() for text in re.split(r'(\d+)', file_path)]
 
 def data_augmentation(input_dir, output_dir):
 
@@ -10,8 +15,8 @@ def data_augmentation(input_dir, output_dir):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
-    # Collect all file paths from the input directory
-    all_files = glob.glob(os.path.join(input_dir, "*.jpg"))  # Adjust extension if needed
+    # Collect and sort file paths in natural order
+    all_files = sorted(glob.glob(os.path.join(input_dir, "*.jpg")), key=natural_sort_key)
 
     # Load images in grayscale
     images = [cv2.imread(file, cv2.IMREAD_GRAYSCALE) for file in all_files]
@@ -33,9 +38,10 @@ def data_augmentation(input_dir, output_dir):
     # Apply augmentations to each image
     augmented_images = seq(images=images)
 
-    # Save augmented images
-    for i, img in enumerate(augmented_images):
+    # Save augmented images with original filenames
+    for file, img in zip(all_files, augmented_images):
         img = np.clip(img, 0, 255).astype(np.uint8)  # Ensure the image is in the correct format
-        cv2.imwrite(f"{output_dir}/augmented_image_{i}.jpg", img)
+        output_path = os.path.join(output_dir, f"augmented_{os.path.basename(file)}")
+        cv2.imwrite(output_path, img)
 
     print("Augmentation completed and saved to:", output_dir)

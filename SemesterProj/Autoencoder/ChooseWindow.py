@@ -7,6 +7,9 @@ def choose_window(input_dir, output_dir, x, y, Nx, Ny):
     """
     Main function to select a window and crop all images in the input directory.
     """
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
     # Read the first image for initial window selection
     first_image_path = sorted(glob.glob(f"{input_dir}/*.jpg"))[0]
     first_image = cv2.imread(first_image_path)
