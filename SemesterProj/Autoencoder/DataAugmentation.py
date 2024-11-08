@@ -25,10 +25,10 @@ def data_augmentation(input_dir, output_dir):
 
     # Define an augmentation sequence
     seq = iaa.Sequential([
-        iaa.Fliplr(0.5),  # Flip images horizontally with 50% probability
+        iaa.Fliplr(0.0),  # Flip images horizontally with 50% probability
         iaa.Affine(
-            rotate=(-10, 10),  # Rotate images by -10 to +10 degrees
-            scale=(0.9, 1.1)  # Scale images to 90% to 110%
+            rotate=(0, 0),  # Rotate images by -10 to +10 degrees
+            scale=(1.0, 1.2)  # Scale images to 90% to 110%
         ),
         iaa.AdditiveGaussianNoise(scale=(0, 0.01 * 255)),  # Add Gaussian noise
         iaa.LinearContrast((0.8, 1.2)),  # Adjust contrast
@@ -41,7 +41,7 @@ def data_augmentation(input_dir, output_dir):
     # Save augmented images with original filenames
     for file, img in zip(all_files, augmented_images):
         img = np.clip(img, 0, 255).astype(np.uint8)  # Ensure the image is in the correct format
-        output_path = os.path.join(output_dir, f"augmented_{os.path.basename(file)}")
+        output_path = os.path.join(output_dir, f"{os.path.basename(file)}")
         cv2.imwrite(output_path, img)
 
     print("Augmentation completed and saved to:", output_dir)
