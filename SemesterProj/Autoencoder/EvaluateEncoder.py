@@ -26,15 +26,15 @@ def evaluate_autoencoder(autoencoder, input_dir, target_dir, num_samples=5):
     # Plot regularity scores
     plt.figure(figsize=(10, 6))
     plt.plot(regularity_scores, marker='o', linestyle='-', color='b')
-    plt.title('Regularity Scores for Reconstructed Images')
+    plt.title('Anomaly Scores for Reconstructed Images')
     plt.xlabel('Image Index')
-    plt.ylabel('Regularity Score (MSE)')
+    plt.ylabel('Anomaly Score (MSE)')
     plt.grid()
     plt.show()
 
 
     # Specify the index of the image you want to display
-    specified_index = 184  # Change this to the index of your desired image
+    specified_index = 10  # Change this to the index of your desired image
 
     # Create a single figure for both sets of images
     plt.figure(figsize=(12, 8))
