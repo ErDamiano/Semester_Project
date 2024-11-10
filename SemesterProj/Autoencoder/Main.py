@@ -37,7 +37,7 @@ input_dirs = [
 ]
 '''
 input_dirs = [
-    "/Users/DamianFrei/Desktop/ETH/Master/SemesterProject/Raw Frames/MN_001",
+    "/Users/DamianFrei/Desktop/ETH/Master/SemesterProject/Raw Frames/MN_902",
 ]
 
 # Define the output directory for collected images
@@ -72,13 +72,17 @@ target_dir = '/Users/DamianFrei/Desktop/ETH/Master/SemesterProject/AugmentedFram
 # Load images
 input_images, target_images = load_images(input_dir, target_dir, target_size=(32,256))
 
+'''
+
+
+
 # Initialize the autoencoder model
 input_shape = input_images.shape[1:]  # (height, width, channels)
 autoencoder = create_autoencoder(input_shape)
 
 # Train the autoencoder
-epochs = 300
-batch_size = 32
+epochs = 500
+batch_size = 8
 autoencoder.fit(input_images, target_images,
                 epochs=epochs,
                 batch_size=batch_size,
@@ -94,6 +98,6 @@ print("Model saved as 'denoising_autoencoder.h5'")
 #autoencoder = load_model('/Users/DamianFrei/Desktop/ETH/Master/SemesterProject/Codes/SemesterProj/Autoencoder/denoising_autoencoder.h5')
 #regularity_scores = evaluate_autoencoder(autoencoder, input_images, target_images)
 
-
+'''
 
 

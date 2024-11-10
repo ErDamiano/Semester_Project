@@ -27,8 +27,8 @@ def data_augmentation(input_dir, output_dir):
     seq = iaa.Sequential([
         iaa.Fliplr(0.0),  # Flip images horizontally with 50% probability
         iaa.Affine(
-            rotate=(0, 0),  # Rotate images by -10 to +10 degrees
-            scale=(1.0, 1.2)  # Scale images to 90% to 110%
+            rotate=(0, 0),  # Rotate images
+            scale=(1.0, 1.2)  # Scale images to 100% to 120%
         ),
         iaa.AdditiveGaussianNoise(scale=(0, 0.01 * 255)),  # Add Gaussian noise
         iaa.LinearContrast((0.8, 1.2)),  # Adjust contrast

@@ -18,23 +18,41 @@ def evaluate_autoencoder(autoencoder, input_dir, target_dir, num_samples=5):
     reconstructed_images = autoencoder.predict(input_images)
 
     # Calculate regularity scores (Mean Squared Error)
-    regularity_scores = [
+    anomaly_scores = [
         np.mean((original - reconstructed) ** 2)
         for original, reconstructed in zip(target_images, reconstructed_images)
     ]
 
+    top_n = 20  # Number of top scores to retrieve
+    top_indices = np.argsort(anomaly_scores)[-top_n:][::-1]  # Sort and reverse for descending order
+
+    # Print top indices and their corresponding scores
+    for idx in top_indices:
+        print(f"Index: {idx}, Anomaly Score: {anomaly_scores[idx]}")
+
+    x_values = np.linspace(0, len(anomaly_scores), len(anomaly_scores))
+
+    # Set the backend to TkAgg to ensure an interactive window
+    plt.switch_backend('TkAgg')
+
     # Plot regularity scores
-    plt.figure(figsize=(10, 6))
-    plt.plot(regularity_scores, marker='o', linestyle='-', color='b')
+    fig, ax = plt.subplots(figsize=(10, 6))
+    sc = ax.plot(anomaly_scores, marker='o', linestyle='-', color='b')
     plt.title('Anomaly Scores for Reconstructed Images')
     plt.xlabel('Image Index')
     plt.ylabel('Anomaly Score (MSE)')
     plt.grid()
-    plt.show()
 
+    def on_click(event):
+        if event.inaxes == ax:
+            x, y = event.xdata, event.ydata
+            print(f"Clicked at x={x:.0f}, y={y:.4f}")
+
+    # Connect the event to the figure
+    fig.canvas.mpl_connect('button_press_event', on_click)
 
     # Specify the index of the image you want to display
-    specified_index = 10  # Change this to the index of your desired image
+    specified_index = 176  # Change this to the index of your desired image
 
     # Create a single figure for both sets of images
     plt.figure(figsize=(12, 8))
@@ -58,8 +76,7 @@ def evaluate_autoencoder(autoencoder, input_dir, target_dir, num_samples=5):
     plt.tight_layout()
     plt.show()
 
-
-    return regularity_scores
+    return anomaly_scores
 
 # Load the trained model
 from tensorflow.keras.models import load_model
