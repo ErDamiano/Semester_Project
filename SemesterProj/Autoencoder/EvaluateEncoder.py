@@ -2,6 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 from LoadInputAndTarget import load_images
+from Hann import smooth_anomaly_scores
+from AggregateScores import aggregate_anomaly_scores
 
 def evaluate_autoencoder(autoencoder, input_dir, target_dir, num_samples=5):
     # Load images
@@ -23,21 +25,25 @@ def evaluate_autoencoder(autoencoder, input_dir, target_dir, num_samples=5):
         for original, reconstructed in zip(target_images, reconstructed_images)
     ]
 
-    top_n = 20  # Number of top scores to retrieve
-    top_indices = np.argsort(anomaly_scores)[-top_n:][::-1]  # Sort and reverse for descending order
+    print(len(anomaly_scores))
+
+
+    summed_scores = aggregate_anomaly_scores(anomaly_scores)
+    smoothed_scores = smooth_anomaly_scores(summed_scores, window_size=5)
+
+    top_n = 8  # Number of top scores to retrieve
+    top_indices = np.argsort(summed_scores)[-top_n:][::-1]  # Sort and reverse for descending order
 
     # Print top indices and their corresponding scores
     for idx in top_indices:
         print(f"Index: {idx}, Anomaly Score: {anomaly_scores[idx]}")
-
-    x_values = np.linspace(0, len(anomaly_scores), len(anomaly_scores))
 
     # Set the backend to TkAgg to ensure an interactive window
     plt.switch_backend('TkAgg')
 
     # Plot regularity scores
     fig, ax = plt.subplots(figsize=(10, 6))
-    sc = ax.plot(anomaly_scores, marker='o', linestyle='-', color='b')
+    sc = ax.plot(smoothed_scores, marker='o', linestyle='-', color='b')
     plt.title('Anomaly Scores for Reconstructed Images')
     plt.xlabel('Image Index')
     plt.ylabel('Anomaly Score (MSE)')
@@ -52,7 +58,7 @@ def evaluate_autoencoder(autoencoder, input_dir, target_dir, num_samples=5):
     fig.canvas.mpl_connect('button_press_event', on_click)
 
     # Specify the index of the image you want to display
-    specified_index = 176  # Change this to the index of your desired image
+    specified_index = top_indices[0]*2
 
     # Create a single figure for both sets of images
     plt.figure(figsize=(12, 8))
