@@ -13,8 +13,8 @@ from AutoEncoder import create_autoencoder
 # Set initial parameters to crop the images around x y with a window size of Nx and Ny
 Nx = 32  # Default width window
 Ny = 128  # Default height window
-x, y = 1000, 910  # Default center coordinates for the crop window
-
+x, y = 1000, 940  # Default center coordinates for the crop window
+Num_crops_per_image = 5 # Choose how many windows are created per frame
 # List of directories containing images
 # Natural sorting function for image filenames
 def natural_sort_key(file_path):
@@ -22,7 +22,6 @@ def natural_sort_key(file_path):
 
 
 '''
-
 input_dirs = [
     "/Users/DamianFrei/Desktop/ETH/Master/SemesterProject/Raw Frames/MN_001",
     "/Users/DamianFrei/Desktop/ETH/Master/SemesterProject/Raw Frames/MN_002",
@@ -42,7 +41,8 @@ input_dirs = [
 input_dirs = [
     "/Users/DamianFrei/Desktop/ETH/Master/SemesterProject/Raw Frames/MN_003",
     "/Users/DamianFrei/Desktop/ETH/Master/SemesterProject/Raw Frames/MN_451",
-    "/Users/DamianFrei/Desktop/ETH/Master/SemesterProject/Raw Frames/MN_452",
+    "/Users/DamianFrei/Desktop/ETH/Master/SemesterProject/Raw Frames/MN_902",
+
 ]
 
 
@@ -50,7 +50,7 @@ input_dirs = [
 output_base_dir = "/Users/DamianFrei/Desktop/ETH/Master/SemesterProject/To be processed"
 os.makedirs(output_base_dir, exist_ok=True)  # Create the output directory if it doesn't exist
 # Run the cropping function for the current directory
-choose_window(input_dirs, output_base_dir, x, y, Nx, Ny)
+choose_window(input_dirs, output_base_dir, x, y, Nx, Ny, Num_crops_per_image)
 
 
 # Call the Data Augmentation function to make the frames more different from each other
@@ -63,15 +63,18 @@ data_augmentation(input_dir_augment, output_dir_augment)
 # Adds a mask of Gaussian patches to feed to the Algorithm which will try to remove it and restore the image
 input_dir_noisy = "/Users/DamianFrei/Desktop/ETH/Master/SemesterProject/AugmentedFrames"
 output_dir_noisy = "/Users/DamianFrei/Desktop/ETH/Master/SemesterProject/All processed images"
-apply_noise_to_directory(input_dir_noisy, output_dir_noisy, 8, 0.6)
+apply_noise_to_directory(input_dir_noisy, output_dir_noisy, 16, 0.4)
 
 
-# Paths to your data
+
+
+
+# Paths to your data for Autoencoder
 input_dir = '/Users/DamianFrei/Desktop/ETH/Master/SemesterProject/All processed images'
 target_dir = '/Users/DamianFrei/Desktop/ETH/Master/SemesterProject/AugmentedFrames'
-
 # Load images
-input_images, target_images = load_images(input_dir, target_dir, target_size=(32,128))
+input_images, target_images = load_images(input_dir, target_dir, (Nx,Ny))
+
 
 '''
 
@@ -82,12 +85,12 @@ autoencoder = create_autoencoder(input_shape)
 
 # Train the autoencoder
 epochs = 200
-batch_size = 4
+batch_size = 8
 autoencoder.fit(input_images, target_images,
                 epochs=epochs,
                 batch_size=batch_size,
                 shuffle=True,
-                validation_split=0.23)
+                validation_split=0.1)
 
 # Save the trained model
 autoencoder.save('denoising_autoencoder.h5')

@@ -5,9 +5,9 @@ from LoadInputAndTarget import load_images
 from Hann import smooth_anomaly_scores
 from AggregateScores import aggregate_anomaly_scores
 
-def evaluate_autoencoder(autoencoder, input_dir, target_dir, num_samples=5):
+def evaluate_autoencoder(autoencoder, input_dir, target_dir, target_size=(32, 128), num_samples=5):
     # Load images
-    input_images, target_images = load_images(input_dir, target_dir)
+    input_images, target_images = load_images(input_dir, target_dir, target_size)
 
     # List all files in the target directory
     files = os.listdir(target_dir)
@@ -27,8 +27,7 @@ def evaluate_autoencoder(autoencoder, input_dir, target_dir, num_samples=5):
 
     print(len(anomaly_scores))
 
-
-    summed_scores = aggregate_anomaly_scores(anomaly_scores)
+    summed_scores = aggregate_anomaly_scores(anomaly_scores, 3)
     smoothed_scores = smooth_anomaly_scores(summed_scores, window_size=5)
 
     top_n = 8  # Number of top scores to retrieve
@@ -43,7 +42,7 @@ def evaluate_autoencoder(autoencoder, input_dir, target_dir, num_samples=5):
 
     # Plot regularity scores
     fig, ax = plt.subplots(figsize=(10, 6))
-    sc = ax.plot(smoothed_scores, marker='o', linestyle='-', color='b')
+    sc = ax.plot(summed_scores, marker='o', linestyle='-', color='b')
     plt.title('Anomaly Scores for Reconstructed Images')
     plt.xlabel('Image Index')
     plt.ylabel('Anomaly Score (MSE)')
@@ -58,7 +57,7 @@ def evaluate_autoencoder(autoencoder, input_dir, target_dir, num_samples=5):
     fig.canvas.mpl_connect('button_press_event', on_click)
 
     # Specify the index of the image you want to display
-    specified_index = top_indices[0]*2
+    specified_index = top_indices[0]*5
 
     # Create a single figure for both sets of images
     plt.figure(figsize=(12, 8))

@@ -25,12 +25,12 @@ def data_augmentation(input_dir, output_dir):
 
     # Define an augmentation sequence
     seq = iaa.Sequential([
-        iaa.Fliplr(0.0),  # Flip images horizontally with 50% probability
+        iaa.Fliplr(0.5),  # Flip images horizontally with 50% probability
         iaa.Affine(
-            rotate=(0, 0),  # Rotate images
+            rotate=(-10, 10),  # Rotate images
             scale=(1.0, 1.2)  # Scale images to 100% to 120%
         ),
-        iaa.AdditiveGaussianNoise(scale=(0, 0.01 * 255)),  # Add Gaussian noise
+        iaa.AdditiveGaussianNoise(scale=(0, 0 * 255)),  # Add Gaussian noise
         iaa.LinearContrast((0.8, 1.2)),  # Adjust contrast
         iaa.Crop(percent=(0, 0.1)),  # Randomly crop images
     ])

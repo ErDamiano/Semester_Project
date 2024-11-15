@@ -16,7 +16,7 @@ def add_noise_patch_to_image(image, patch_size, transparency, output_dir=None, i
     - image: Input image (grayscale or color).
     - patch_size: Size of the noise patch (default is 16x16).
     - transparency: Controls the intensity of the noise overlay.
-    - output_dir: Directory to save the noise patch if provided.
+    - output_dir_clips: Directory to save the noise patch if provided.
     - index: Index number to uniquely save the noise patch.
     - blur_kernel: Tuple specifying the kernel size for Gaussian blur.
 
@@ -31,14 +31,14 @@ def add_noise_patch_to_image(image, patch_size, transparency, output_dir=None, i
     noise_large = cv2.resize(noise_patch, (image.shape[1], image.shape[0]), interpolation=cv2.INTER_LINEAR)
 
     # Step 3: Smooth the upsampled noise with Gaussian blur
-    noise_large = cv2.GaussianBlur(noise_large, blur_kernel, 0)  # Apply Gaussian blur
+    noise_large = cv2.GaussianBlur(noise_large, blur_kernel, 0.4)  # Apply Gaussian blur
 
     # Step 4: Convert the original image to float32 for compatibility
     image = image.astype(np.float32)
     noise_large = noise_large.astype(np.float32)
 
     # Step 5: Add noise to image with masking
-    noisy_image = cv2.addWeighted(image, 1.0, noise_large, transparency, 0)
+    noisy_image = cv2.addWeighted(image, 0.7, noise_large, transparency, 0)
     noisy_image = np.clip(noisy_image, 0, 255).astype(np.uint8)  # Convert back to uint8
 
     return noisy_image
@@ -49,7 +49,7 @@ def apply_noise_to_directory(input_dir, output_dir, patch_size, transparency):
 
     Parameters:
     - input_dir: Directory containing the images to process.
-    - output_dir: Directory where the noisy images will be saved.
+    - output_dir_clips: Directory where the noisy images will be saved.
     - patch_size: Size of the noise patch.
     - transparency: Intensity of the noise overlay.
     """

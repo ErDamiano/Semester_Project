@@ -1,6 +1,6 @@
 import numpy as np
 
-def aggregate_anomaly_scores(anomaly_scores, num_crops_per_image=5):
+def aggregate_anomaly_scores(anomaly_scores, num_crops_per_image):
 
     # Reshape the array so each row represents scores for one image's cropped frames
     scores_per_image = np.array(anomaly_scores).reshape(-1, num_crops_per_image)

@@ -3,7 +3,7 @@ import glob
 import os
 import re
 
-def choose_window(input_dirs, output_base_dir, x, y, Nx, Ny):
+def choose_window(input_dirs, output_base_dir, x, y, Nx, Ny, Num_crops_per_image):
     """
     Function to crop five adjacent windows from each image in multiple input directories,
     saving them sequentially in a single output folder with subframe numbering.
@@ -19,7 +19,8 @@ def choose_window(input_dirs, output_base_dir, x, y, Nx, Ny):
     for input_dir in input_dirs:
         # List all .tiff and .tif files in the directory
         image_paths = sorted(glob.glob(f"{input_dir}/*.tiff")) + \
-                      sorted(glob.glob(f"{input_dir}/*.tif"))
+                      sorted(glob.glob(f"{input_dir}/*.tif")) + \
+                      sorted(glob.glob(f"{input_dir}/*.png"))
 
         # Confirm at least one image exists
         if not image_paths:
@@ -42,7 +43,7 @@ def choose_window(input_dirs, output_base_dir, x, y, Nx, Ny):
             x_start = max(x - Nx // 2, 0)
 
             # Crop and save five strips
-            for subframe_index in range(5):
+            for subframe_index in range(Num_crops_per_image):
                 x1 = x_start + subframe_index * Nx
                 x2 = x1 + Nx
 

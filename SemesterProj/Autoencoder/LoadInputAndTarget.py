@@ -3,7 +3,7 @@ import glob
 import os
 import numpy as np
 
-def load_images(input_dir, target_dir, target_size=(32, 128)):
+def load_images(input_dir, target_dir, target_size):
     """
     Loads, resizes, and pairs input (noisy) and target (clean) images for training.
 
