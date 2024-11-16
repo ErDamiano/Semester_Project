@@ -15,7 +15,7 @@ from LoadClips import load_clips
 # Set initial parameters to crop the images around x y with a window size of Nx and Ny
 Nx = 32  # Default width window
 Ny = 128  # Default height window
-x, y = 1100, 970  # Default center coordinates for the crop window
+x, y = 1400, 970  # Default center coordinates for the crop window
 num_crops_per_image = 1
 frames_per_clip = 8
 
@@ -43,7 +43,7 @@ input_dirs = [
 
 
 input_dirs_clips = [
-    "/Users/DamianFrei/Desktop/ETH/Master/SemesterProject/Raw Frames/MN_002",
+    "/Users/DamianFrei/Desktop/ETH/Master/SemesterProject/Raw Frames/MN_001",
 ]
 output_dir_clips = "/Users/DamianFrei/Desktop/ETH/Master/SemesterProject/Raw Clips"
 os.makedirs(output_dir_clips, exist_ok=True)  # Create the output directory if it doesn't exist
@@ -63,7 +63,9 @@ subfolders = [os.path.join(input_dir_window, folder) for folder in sorted(os.lis
 # Apply the confirmed coordinates to all subfolders without further confirmation
 choose_window(subfolders, output_dir_window, x, y, Nx, Ny, num_crops_per_image)
 
-'''
+
+
+
 # Paths to your data for Autoencoder
 input_dir = '/Users/DamianFrei/Desktop/ETH/Master/SemesterProject/Cropped Clips'
 
@@ -74,6 +76,8 @@ inputs, targets = load_clips(input_dir, Nx,Ny, frames_per_clip)
 print(f"Inputs shape: {inputs.shape}")
 print(f"Targets shape: {targets.shape}")
 
+'''
+
 input_shape = (frames_per_clip-1, Ny, Nx, 1)
 model = build_convlstm_model(input_shape)
 model.fit(inputs, targets, batch_size=4, epochs=100, validation_split=0.1)
@@ -82,4 +86,3 @@ model.save('Predicting.h5')
 print("Model saved as 'Predicting.h5'")
 
 '''
-

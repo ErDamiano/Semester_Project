@@ -130,5 +130,5 @@ plot_reconstructed_vs_target(
         trained_model,
         input_cuboids,
         target_images,
-        clip_index=3  # Specify the current index
+        clip_index=13  # Specify the current index
     )
