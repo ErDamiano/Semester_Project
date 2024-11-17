@@ -43,7 +43,7 @@ input_dirs = [
 
 
 input_dirs_clips = [
-    "/Users/DamianFrei/Desktop/ETH/Master/SemesterProject/Raw Frames/MN_001",
+    "/Users/DamianFrei/Desktop/ETH/Master/SemesterProject/Raw Frames/MN_902",
 ]
 output_dir_clips = "/Users/DamianFrei/Desktop/ETH/Master/SemesterProject/Raw Clips"
 os.makedirs(output_dir_clips, exist_ok=True)  # Create the output directory if it doesn't exist
